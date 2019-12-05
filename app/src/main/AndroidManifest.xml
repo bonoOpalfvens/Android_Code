@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:icon="@drawable/fluxcode"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/fluxcode"
+        android:roundIcon="@drawable/fluxcode_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
