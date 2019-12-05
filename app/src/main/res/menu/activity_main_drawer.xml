@@ -14,12 +14,16 @@
             android:title="@string/menu_boards" />
     </group>
 
-    <item android:title="Account">
+    <item android:title="@string/account">
         <menu>
             <item
                 android:id="@+id/nav_login"
                 android:icon="@drawable/account"
                 android:title="@string/menu_login" />
+            <item
+                android:id="@+id/nav_register"
+                android:icon="@drawable/register"
+                android:title="@string/register" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/exit"

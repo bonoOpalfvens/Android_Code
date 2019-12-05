@@ -6,6 +6,14 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_boards">Boards</string>
+    <string name="account">Account</string>
     <string name="menu_login">Login</string>
+    <string name="register">Register</string>
     <string name="menu_logout">Logout</string>
+    <string name="register_introduction">Register now to get the most out of using this app. \nWe do not charge you for any of the services provided.</string>
+    <string name="email_tag">Email</string>
+    <string name="username_tag">Username</string>
+    <string name="password_tag">Password</string>
+    <string name="confirm_password_tag">Confirm password</string>
+    <string name="register_confirm">By clicking register, you are in agreement with the Terms and Conditions and our Privacy Policy.</string>
 </resources>
