@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.*
 
 class Post : Serializable {
-    constructor(id: Int, title: String, content: String, user: User, dateAdded: Date, noComments: Int, likes: Int, isLiking: Boolean){
+    constructor(id: Int, title: String, content: String, user: User, dateAdded: String, noComments: Int, likes: Int, isLiking: Boolean){
         this.id = id
         this.title = title
         this.content = content
@@ -19,7 +19,7 @@ class Post : Serializable {
     val title: String
     val content: String
     val user: User
-    val dateAdded: Date
+    val dateAdded: String
 
     private var _noComments: Int
     val noComments: Int get() = _noComments
@@ -36,8 +36,9 @@ class Post : Serializable {
     private lateinit var _board: Board
     val board: Board get() = _board
 
-    fun loadBoard(board: Board){
+    fun loadBoard(board: Board) : Post {
         _board = board
+        return this
     }
 
     fun loadComments(comments: List<Comment>){
