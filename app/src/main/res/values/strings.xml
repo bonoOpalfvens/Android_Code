@@ -11,6 +11,7 @@
     <string name="register">Register</string>
     <string name="menu_logout">Logout</string>
     <string name="register_introduction">Register now to get the most out of using this app. \nWe do not charge you for any of the services provided.</string>
+    <string name="login_introduction">Login now to get the most out of using this app. \nWe do not charge you for any of the services provided.</string>
     <string name="email_tag">Email</string>
     <string name="username_tag">Username</string>
     <string name="password_tag">Password</string>
