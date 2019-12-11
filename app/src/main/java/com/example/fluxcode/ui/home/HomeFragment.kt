@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fluxcode.R
 import com.example.fluxcode.databinding.FragmentHomeBinding
 
@@ -23,6 +25,20 @@ class HomeFragment : Fragment() {
         val vmf = HomeViewModelFactory(application)
         homeViewModel = ViewModelProviders.of(this, vmf).get(HomeViewModel::class.java)
         binding.viewModel = homeViewModel
+
+        // recyclerview
+        val manager = GridLayoutManager(activity, 1)
+        binding.homePostList.layoutManager = manager
+        val adapter = HomePostListAdapter(HomePostListListener(
+            _onClick = {
+                homeViewModel.onClick(it)
+            }
+        ))
+        binding.homePostList.adapter = adapter
+        homeViewModel.posts.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it.sortedByDescending { p -> p.likes })
+        })
+
         binding.lifecycleOwner = this
 
         return binding.root

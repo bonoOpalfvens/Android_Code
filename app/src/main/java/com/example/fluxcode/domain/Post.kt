@@ -1,7 +1,7 @@
 package com.example.fluxcode.domain
 
 import java.io.Serializable
-import java.util.*
+import java.sql.Date
 
 class Post : Serializable {
     constructor(id: Int, title: String, content: String, user: User, dateAdded: String, noComments: Int, likes: Int, isLiking: Boolean){
@@ -35,6 +35,28 @@ class Post : Serializable {
 
     private lateinit var _board: Board
     val board: Board get() = _board
+
+    fun shortContent(): String {
+        if(content.length > 250)
+            return content.substring(0, 250).plus("...")
+        return content
+    }
+
+    fun infoString(): String {
+        return "Posted by ${user.displayName} on ${dateAdded.substring(8, 10)}/${dateAdded.substring(5, 7)}/${dateAdded.substring(0, 4)}"
+    }
+
+    fun commentString(): String {
+        if(noComments == 1)
+            return "$noComments Comment"
+        return "$noComments Comments"
+    }
+
+    fun likeString(): String {
+        if(likes == 1)
+            return "$likes Like"
+        return "$likes Likes"
+    }
 
     fun loadBoard(board: Board) : Post {
         _board = board

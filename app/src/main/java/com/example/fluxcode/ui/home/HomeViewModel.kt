@@ -37,4 +37,9 @@ class HomeViewModel(app: Application) : ViewModel(){
             }
         }
     }
+
+    // EventHandlers
+    fun onClick(post: Post){
+        return
+    }
 }

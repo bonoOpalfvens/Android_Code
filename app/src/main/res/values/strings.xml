@@ -21,4 +21,5 @@
     <string name="home_introduction">This is the homepage where we provide you an overview of our most relevant content.\nThank you for visiting and do enjoy your stay!\n\nIf you enjoy this application, don\'t hesitate to sign up or log in!\nBy doing so, you get the ability to like, react, comment and post content!</string>
     <string name="btn_register">Create your free account now!</string>
     <string name="title_featured_posts">Featured Posts</string>
+    <string name="action_view">View</string>
 </resources>
