@@ -50,7 +50,7 @@ interface CodeApiService {
 
     // Get detailed board by id
     @GET("Board/{id}")
-    suspend fun getBoardById(@Path("id") id: Int) : Response<List<BoardResponseDTO>>
+    suspend fun getBoardById(@Path("id") id: Int) : Response<BoardResponseDTO>
 
     // Post
     // Get featured posts
@@ -59,7 +59,7 @@ interface CodeApiService {
 
     // Get detailed post by id
     @GET("Post/{id}")
-    suspend fun getPostById(@Path("id") id: Int) : Response<List<PostDetailResponseDTO>>
+    suspend fun getPostById(@Path("id") id: Int) : Response<PostDetailResponseDTO>
 }
 
 object CodeApi {

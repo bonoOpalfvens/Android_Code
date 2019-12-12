@@ -46,6 +46,6 @@ class HomePostListDiffCallback: DiffUtil.ItemCallback<Post>() {
     }
 }
 
-class HomePostListListener(val _onClick: (post: Post)->Unit) {
-    fun onClick(post: Post) = _onClick(post)
+class HomePostListListener(val _viewPost: (post: Post)->Unit) {
+    fun viewPost(post: Post) = _viewPost(post)
 }

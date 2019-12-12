@@ -22,4 +22,5 @@
     <string name="btn_register">Create your free account now!</string>
     <string name="title_featured_posts">Featured Posts</string>
     <string name="action_view">View</string>
+    <string name="action_comment">Comment</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fluxcode.R
 import com.example.fluxcode.databinding.FragmentHomeBinding
@@ -30,8 +31,8 @@ class HomeFragment : Fragment() {
         val manager = GridLayoutManager(activity, 1)
         binding.homePostList.layoutManager = manager
         val adapter = HomePostListAdapter(HomePostListListener(
-            _onClick = {
-                homeViewModel.onClick(it)
+            _viewPost = {
+                homeViewModel.viewPost(it)
             }
         ))
         binding.homePostList.adapter = adapter
@@ -39,8 +40,12 @@ class HomeFragment : Fragment() {
             adapter.submitList(it.sortedByDescending { p -> p.likes })
         })
 
-        binding.lifecycleOwner = this
+        // safeArgs navigation
+        homeViewModel.post.observe(viewLifecycleOwner, Observer {
+            this.findNavController().navigate(HomeFragmentDirections.actionNavHomeToPostFragment(it))
+        })
 
+        binding.lifecycleOwner = this
         return binding.root
     }
 
