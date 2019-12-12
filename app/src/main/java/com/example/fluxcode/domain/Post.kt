@@ -1,7 +1,6 @@
 package com.example.fluxcode.domain
 
 import java.io.Serializable
-import java.sql.Date
 
 class Post : Serializable {
     constructor(id: Int, title: String, content: String, user: User, dateAdded: String, noComments: Int, likes: Int, isLiking: Boolean){
@@ -19,7 +18,7 @@ class Post : Serializable {
     val title: String
     val content: String
     val user: User
-    val dateAdded: String
+    private val dateAdded: String
 
     private var _noComments: Int
     val noComments: Int get() = _noComments

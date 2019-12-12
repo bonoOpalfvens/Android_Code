@@ -42,7 +42,10 @@ class HomeFragment : Fragment() {
 
         // safeArgs navigation
         homeViewModel.post.observe(viewLifecycleOwner, Observer {
-            this.findNavController().navigate(HomeFragmentDirections.actionNavHomeToPostFragment(it))
+            if(it != null) {
+                this.findNavController().navigate(HomeFragmentDirections.actionNavHomeToPostFragment(it))
+                homeViewModel.onNavigated()
+            }
         })
 
         binding.lifecycleOwner = this

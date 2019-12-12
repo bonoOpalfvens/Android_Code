@@ -59,4 +59,9 @@ class HomeViewModel(app: Application) : ViewModel(){
             }
         }
     }
+
+    // SafeArgs
+    fun onNavigated(){
+        _post.value = null
+    }
 }

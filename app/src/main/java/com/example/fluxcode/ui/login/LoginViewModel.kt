@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fluxcode.network.CodeApi
 import com.example.fluxcode.network.dtos.LoginDTO
+import com.example.fluxcode.utils.UserService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,6 +16,10 @@ class LoginViewModel(app: Application) : ViewModel() {
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
+
+    init {
+        UserService.setToken("")
+    }
 
     fun login(){
         try{
@@ -36,6 +41,7 @@ class LoginViewModel(app: Application) : ViewModel() {
 
                 if(response.isSuccessful) {
                     Toast.makeText(app, response.body()?.token, Toast.LENGTH_LONG).show()
+                    UserService.setToken(response.body()!!.token)
                 }else{
                     throw Exception("${response.code()}: ${response.message()}")
                 }

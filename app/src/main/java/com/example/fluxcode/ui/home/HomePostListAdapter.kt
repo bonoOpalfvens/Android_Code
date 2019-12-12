@@ -42,7 +42,7 @@ class HomePostListDiffCallback: DiffUtil.ItemCallback<Post>() {
     }
 
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-        return oldItem.id == newItem.id && oldItem.likes == newItem.likes && oldItem.noComments == newItem.likes
+        return oldItem.id == newItem.id && oldItem.likes == newItem.likes
     }
 }
 

@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fluxcode.R
 import com.example.fluxcode.databinding.FragmentPostBinding
 import com.example.fluxcode.domain.Post
+import com.example.fluxcode.ui.home.HomePostListAdapter
+import com.example.fluxcode.ui.home.HomePostListListener
 import com.squareup.picasso.Picasso
 
 class PostFragment : Fragment() {
@@ -28,6 +32,15 @@ class PostFragment : Fragment() {
         binding.viewModel = postViewModel
 
         Picasso.get().load(post.board.icon).into(binding.boardImage)
+
+        // recyclerview
+        val manager = GridLayoutManager(activity, 1)
+        binding.commentList.layoutManager = manager
+        val adapter = PostCommentListAdapter()
+        binding.commentList.adapter = adapter
+        postViewModel.post.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it.comments)
+        })
 
         binding.lifecycleOwner = this
         return binding.root

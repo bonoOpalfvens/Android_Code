@@ -14,7 +14,7 @@ class Comment : Serializable {
 
     val id: Int
     val user: User
-    val dateAdded: String
+    private val dateAdded: String
     val content: String
 
     private var _likes: Int
@@ -22,6 +22,10 @@ class Comment : Serializable {
 
     private var _isLiking: Boolean
     val isLiking: Boolean get() = _isLiking
+
+    fun infoString(): String {
+        return "Posted on ${dateAdded.substring(8, 10)}/${dateAdded.substring(5, 7)}/${dateAdded.substring(0, 4)}"
+    }
 
     fun like(){
         if(isLiking) {
