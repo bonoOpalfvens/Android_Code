@@ -27,6 +27,14 @@ class Board : Serializable {
     private var _isLiking: Boolean
     val isLiking: Boolean get() = _isLiking
 
+    private var _posts = mutableListOf<Post>()
+    val posts: List<Post> get() = _posts
+
+    fun loadPosts(posts: List<Post>) : Board {
+        _posts = posts as MutableList<Post>
+        return this
+    }
+
     fun like(){
         if(isLiking) {
             _likes--

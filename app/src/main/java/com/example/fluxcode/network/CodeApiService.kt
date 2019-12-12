@@ -1,5 +1,8 @@
 package com.example.fluxcode.network
 
+import com.example.fluxcode.network.dtos.BoardResponseDTO
+import com.example.fluxcode.network.dtos.MinimalBoardDTO
+import com.example.fluxcode.network.dtos.PostDetailResponseDTO
 import com.example.fluxcode.network.dtos.PostResponseDTO
 import com.example.fluxcode.utils.Constants
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -10,7 +13,7 @@ import retrofit2.Converter
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
+import retrofit2.http.*
 import java.lang.reflect.Type
 import java.util.*
 
@@ -32,8 +35,32 @@ val retrofit: Retrofit = Retrofit.Builder()
     .build()
 
 interface CodeApiService {
+    // Account
+    // Post login details -> Get Bearer token
+    @POST("Account/login")
+    suspend fun login(@Body email: String, password: String) : Response<String>
+
+    // Post register details -> Get Bearer token
+    @POST("Account")
+    suspend fun register(@Body email: String, password: String, userName: String) : Response<String>
+
+    // Board
+    // Get featured boards
+    @GET("Board/top")
+    suspend fun getTopBoards() : Response<List<MinimalBoardDTO>>
+
+    // Get detailed board by id
+    @GET("Board/{id}")
+    suspend fun getBoardById(@Path("id") id: Int) : Response<List<BoardResponseDTO>>
+
+    // Post
+    // Get featured posts
     @GET("Post")
     suspend fun getPosts() : Response<List<PostResponseDTO>>
+
+    // Get detailed post by id
+    @GET("Post/{id}")
+    suspend fun getPostById(@Path("id") id: Int) : Response<List<PostDetailResponseDTO>>
 }
 
 object CodeApi {

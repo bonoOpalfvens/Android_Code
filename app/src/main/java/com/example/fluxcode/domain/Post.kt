@@ -63,8 +63,9 @@ class Post : Serializable {
         return this
     }
 
-    fun loadComments(comments: List<Comment>){
+    fun loadComments(comments: List<Comment>) : Post {
         _comments = comments as MutableList<Comment>
+        return this
     }
 
     fun like(){
