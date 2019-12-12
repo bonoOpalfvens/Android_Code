@@ -1,9 +1,6 @@
 package com.example.fluxcode.network
 
-import com.example.fluxcode.network.dtos.BoardResponseDTO
-import com.example.fluxcode.network.dtos.MinimalBoardDTO
-import com.example.fluxcode.network.dtos.PostDetailResponseDTO
-import com.example.fluxcode.network.dtos.PostResponseDTO
+import com.example.fluxcode.network.dtos.*
 import com.example.fluxcode.utils.Constants
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
@@ -13,9 +10,11 @@ import retrofit2.Converter
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 import java.lang.reflect.Type
-import java.util.*
 
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
@@ -37,12 +36,12 @@ val retrofit: Retrofit = Retrofit.Builder()
 interface CodeApiService {
     // Account
     // Post login details -> Get Bearer token
-    @POST("Account/login")
-    suspend fun login(@Body email: String, password: String) : Response<String>
+    @POST("Account/login/android")
+    suspend fun login(@Body loginDTO: LoginDTO) : Response<TokenResponseDTO>
 
     // Post register details -> Get Bearer token
-    @POST("Account")
-    suspend fun register(@Body email: String, password: String, userName: String) : Response<String>
+    @POST("Account/android")
+    suspend fun register(@Body registerDTO: RegisterDTO) : Response<TokenResponseDTO>
 
     // Board
     // Get featured boards
