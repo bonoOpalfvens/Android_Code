@@ -23,4 +23,7 @@
     <string name="title_featured_posts">Featured Posts</string>
     <string name="action_view">View</string>
     <string name="action_comment">Comment</string>
+    <string name="overview_boards">Overview Boards</string>
+    <string name="boards_intro">Here\'s an overview of all the boards we have to offer.\nHave fun!</string>
+    <string name="boards">Boards</string>
 </resources>

@@ -20,6 +20,11 @@
             app:popUpTo="@+id/nav_home"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_boards"
+        android:name="com.example.fluxcode.ui.boardExplorer.BoardExplorerFragment"
+        android:label="@string/boards"
+        tools:layout="@layout/fragment_board_explorer" />
 
     <fragment
         android:id="@+id/nav_register"

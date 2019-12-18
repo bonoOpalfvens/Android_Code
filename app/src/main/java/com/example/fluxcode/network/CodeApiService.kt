@@ -40,6 +40,15 @@ interface CodeApiService {
     @POST("Account/android")
     suspend fun register(@Body registerDTO: RegisterDTO) : Response<TokenResponseDTO>
 
+    // Board
+    // Get featured boards
+    @GET("Board")
+    suspend fun getTopBoards() : Response<List<MinimalBoardDTO>>
+
+    // Get detailed board by id
+    @GET("Board/{id}")
+    suspend fun getBoardById(@Path("id") id: Int) : Response<BoardResponseDTO>
+
     // Post
     // Get featured posts
     @GET("Post")

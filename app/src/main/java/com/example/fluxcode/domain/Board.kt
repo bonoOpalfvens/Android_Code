@@ -30,6 +30,12 @@ class Board : Serializable {
     private var _posts = mutableListOf<Post>()
     val posts: List<Post> get() = _posts
 
+    fun postsString(): String {
+        if(noPosts == 1)
+            return "$noPosts Post"
+        return "$noPosts Posts"
+    }
+
     fun loadPosts(posts: List<Post>) : Board {
         _posts = posts as MutableList<Post>
         return this

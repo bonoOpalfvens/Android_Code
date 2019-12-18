@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="board"
+            type="com.example.fluxcode.domain.Board" />
+        <variable
+            name="clickListener"
+            type="com.example.fluxcode.ui.boardExplorer.BoardExplorerListListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/board_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/fluxcode_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars[0]" />
+
+        <TextView
+            android:id="@+id/title_string"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{board.postsString()}"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/board_image"
+            app:layout_constraintStart_toStartOf="@+id/board_image"
+            app:layout_constraintTop_toBottomOf="@+id/board_image" />
+
+        <Button
+            android:id="@+id/btn_view"
+            style="@style/base_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{() -> clickListener.viewBoard(board)}"
+            android:padding="0dp"
+            android:text="@{board.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/board_image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/board_image"
+            app:layout_constraintTop_toBottomOf="@+id/title_string" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
