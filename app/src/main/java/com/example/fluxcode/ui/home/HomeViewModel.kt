@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fluxcode.domain.Post
 import com.example.fluxcode.network.CodeApi
+import com.example.fluxcode.utils.UserService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,6 +38,7 @@ class HomeViewModel(app: Application) : ViewModel(){
                 }
             }catch (e: Exception){
                 e.printStackTrace()
+                if(e.message == "timeout") loadPosts()
                 Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
@@ -57,6 +59,27 @@ class HomeViewModel(app: Application) : ViewModel(){
                 e.printStackTrace()
                 Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    fun likePost(post: Post){
+        if(UserService.loggedIn){
+            GlobalScope.launch(Dispatchers.Main) {
+                try{
+                    val response = CodeApi.retrofitService.likePost(post.id, "Bearer ${UserService.token.value}")
+
+                    if(response.isSuccessful) {
+                        loadPosts()
+                    }else{
+                        throw Exception("${response.code()}: ${response.message()}")
+                    }
+                }catch (e: Exception){
+                    e.printStackTrace()
+                    Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }else{
+            Toast.makeText(app, "Create an account or log in to be able to interact with posts", Toast.LENGTH_LONG).show()
         }
     }
 

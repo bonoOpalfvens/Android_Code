@@ -40,9 +40,9 @@ class LoginViewModel(app: Application) : ViewModel() {
                 val response = CodeApi.retrofitService.login(LoginDTO(email.value!!, password.value!!))
 
                 if(response.isSuccessful) {
-                    Toast.makeText(app, response.body()?.token, Toast.LENGTH_LONG).show()
                     UserService.setToken(response.body()!!.token)
                 }else{
+                    if(response.code() == 400) throw Exception("Invalid credentials provided.")
                     throw Exception("${response.code()}: ${response.message()}")
                 }
             }catch (e: Exception){

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,8 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fluxcode.R
 import com.example.fluxcode.databinding.FragmentPostBinding
 import com.example.fluxcode.domain.Post
-import com.example.fluxcode.ui.home.HomePostListAdapter
-import com.example.fluxcode.ui.home.HomePostListListener
+import com.example.fluxcode.utils.UserService
 import com.squareup.picasso.Picasso
 
 class PostFragment : Fragment() {
@@ -39,7 +39,7 @@ class PostFragment : Fragment() {
         val adapter = PostCommentListAdapter()
         binding.commentList.adapter = adapter
         postViewModel.post.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it.comments)
+            adapter.submitList(it.comments.sortedByDescending { c -> c.id })
         })
 
         binding.lifecycleOwner = this

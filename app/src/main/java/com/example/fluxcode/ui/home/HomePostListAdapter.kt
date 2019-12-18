@@ -46,6 +46,7 @@ class HomePostListDiffCallback: DiffUtil.ItemCallback<Post>() {
     }
 }
 
-class HomePostListListener(val _viewPost: (post: Post)->Unit) {
+class HomePostListListener(val _viewPost: (post: Post)->Unit, val _likePost: (post: Post)->Unit) {
     fun viewPost(post: Post) = _viewPost(post)
+    fun likePost(post: Post) = _likePost(post)
 }

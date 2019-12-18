@@ -42,10 +42,9 @@ class RegisterViewModel(app: Application) : ViewModel(){
                 val response = CodeApi.retrofitService.register(RegisterDTO(email.value!!, username.value!!, password.value!!))
 
                 if(response.isSuccessful) {
-                    Toast.makeText(app, response.body()?.token, Toast.LENGTH_LONG).show()
                     UserService.setToken(response.body()!!.token)
                 }else{
-                    if(response.code() == 400) throw Exception("Email or username")
+                    if(response.code() == 400) throw Exception("Email or username has been taken")
                     throw Exception("${response.code()}: ${response.message()}")
                 }
             }catch (e: Exception){

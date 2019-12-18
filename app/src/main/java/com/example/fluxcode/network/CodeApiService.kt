@@ -10,10 +10,7 @@ import retrofit2.Converter
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import java.lang.reflect.Type
 
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
@@ -43,15 +40,6 @@ interface CodeApiService {
     @POST("Account/android")
     suspend fun register(@Body registerDTO: RegisterDTO) : Response<TokenResponseDTO>
 
-    // Board
-    // Get featured boards
-    @GET("Board/top")
-    suspend fun getTopBoards() : Response<List<MinimalBoardDTO>>
-
-    // Get detailed board by id
-    @GET("Board/{id}")
-    suspend fun getBoardById(@Path("id") id: Int) : Response<BoardResponseDTO>
-
     // Post
     // Get featured posts
     @GET("Post")
@@ -60,6 +48,14 @@ interface CodeApiService {
     // Get detailed post by id
     @GET("Post/{id}")
     suspend fun getPostById(@Path("id") id: Int) : Response<PostDetailResponseDTO>
+
+    // Invert like from post by ID -> Get Bearer token
+    @POST("Post/{id}/like")
+    suspend fun likePost(@Path("id") id: Int, @Header("Authorization") token: String) : Response<Unit>
+
+    // Post comment -> Get Bearer token
+    @POST("Post/Comment")
+    suspend fun createComment(@Body commentDTO: CreateCommentDTO, @Header("Authorization") token: String) : Response<Unit>
 }
 
 object CodeApi {

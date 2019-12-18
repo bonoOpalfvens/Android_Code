@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:padding="0dp"
             android:text="@{post.likeString()}"
+            android:onClick="@{() -> clickListener.likePost(post)}"
             app:layout_constraintEnd_toEndOf="@+id/content_string"
             app:layout_constraintTop_toTopOf="@+id/btn_view" />
 
