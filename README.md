@@ -23,3 +23,10 @@ Built using Gradle.
 Published on: https://codeapi.azurewebsites.net/api
 
 Documentation on: https://codeapi.azurewebsites.net/swagger/
+
+# License
+bonoOpalfvens/Android_Code is licensed under the Apache License 2.0
+
+For more information about the exact specifications of this license, see the following: 
+
+https://github.com/bonoOpalfvens/Android_Code/blob/master/LICENSE
