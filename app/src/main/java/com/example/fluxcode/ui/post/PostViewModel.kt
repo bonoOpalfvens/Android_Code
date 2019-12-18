@@ -48,21 +48,24 @@ class PostViewModel(app: Application, post: Post) : ViewModel(){
 
     fun comment(){
         if(UserService.loggedIn){
-            GlobalScope.launch(Dispatchers.Main) {
-                try{
-                    val response = CodeApi.retrofitService.createComment(CreateCommentDTO(post.value!!.id, comment.value!!), "Bearer ${UserService.token.value}")
+            if(comment.value.isNullOrBlank())
+                Toast.makeText(app, "Please enter text before clicking this button.", Toast.LENGTH_LONG).show()
+            else
+                GlobalScope.launch(Dispatchers.Main) {
+                    try{
+                        val response = CodeApi.retrofitService.createComment(CreateCommentDTO(post.value!!.id, comment.value!!), "Bearer ${UserService.token.value}")
 
-                    if(response.isSuccessful) {
-                        refresh()
-                        comment.value = ""
-                    }else{
-                        throw Exception("${response.code()}: ${response.message()}")
+                        if(response.isSuccessful) {
+                            refresh()
+                            comment.value = ""
+                        }else{
+                            throw Exception("${response.code()}: ${response.message()}")
+                        }
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                        Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
                     }
-                }catch (e: Exception){
-                    e.printStackTrace()
-                    Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
                 }
-            }
         }else{
             Toast.makeText(app, "Create an account or log in to be able to interact with posts", Toast.LENGTH_LONG).show()
         }

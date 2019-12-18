@@ -14,17 +14,19 @@
             android:id="@+id/action_nav_home_to_postFragment"
             app:destination="@+id/postFragment"
             app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_out_right"
-            app:popExitAnim="@anim/slide_in_left"
-            app:popUpTo="@+id/nav_home"
-            app:popUpToInclusive="true" />
+            app:exitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/nav_boards"
         android:name="com.example.fluxcode.ui.boardExplorer.BoardExplorerFragment"
         android:label="@string/boards"
-        tools:layout="@layout/fragment_board_explorer" />
+        tools:layout="@layout/fragment_board_explorer" >
+        <action
+            android:id="@+id/action_nav_boards_to_postExplorerFragment"
+            app:destination="@id/postExplorerFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_register"
@@ -49,5 +51,17 @@
         <argument
             android:name="post"
             app:argType="com.example.fluxcode.domain.Post" />
+    </fragment>
+    <fragment
+        android:id="@+id/postExplorerFragment"
+        android:name="com.example.fluxcode.ui.postExplorer.PostExplorerFragment"
+        android:label="Board"
+        tools:layout="@layout/fragment_post_explorer" >
+        <argument
+            android:name="board"
+            app:argType="com.example.fluxcode.domain.Board" />
+        <action
+            android:id="@+id/action_postExplorerFragment_to_postFragment"
+            app:destination="@id/postFragment" />
     </fragment>
 </navigation>

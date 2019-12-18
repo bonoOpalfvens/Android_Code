@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fluxcode.R
 import com.example.fluxcode.databinding.FragmentBoardExplorerBinding
@@ -42,7 +43,7 @@ class BoardExplorerFragment : Fragment() {
         // safeArgs navigation
         boardExplorerViewModel.board.observe(viewLifecycleOwner, Observer {
             if(it != null) {
-                //this.findNavController().navigate(BoardExplor.actionNavHomeToPostFragment(it))
+                this.findNavController().navigate(BoardExplorerFragmentDirections.actionNavBoardsToPostExplorerFragment(it))
                 boardExplorerViewModel.onNavigated()
             }
         })
