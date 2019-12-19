@@ -6,36 +6,37 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fluxcode.domain.Post
-import com.example.fluxcode.network.CodeApi
-import com.example.fluxcode.utils.UserService
+import com.example.fluxcode.network.persistence.getDatabase
+import com.example.fluxcode.network.persistence.repositories.PostRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class HomeViewModel(app: Application) : ViewModel(){
     private val app = app
 
-    private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> get() = _posts
+    // database connection
+    private val viewModelJob = SupervisorJob()
+    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val database = getDatabase(app)
+    private val postRepository = PostRepository(database)
 
     // safeArgs navigation
     private val _post = MutableLiveData<Post>()
     val post: LiveData<Post> get() = _post
+
+    // fields
+    val posts: LiveData<List<Post>> get() = postRepository.posts
 
     init {
         loadPosts()
     }
 
     private fun loadPosts(){
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             try{
-                val response = CodeApi.retrofitService.getPosts()
-
-                if(response.isSuccessful) {
-                    _posts.value = response.body()?.map { it.toDomain() } ?: emptyList()
-                }else{
-                    throw Exception("${response.code()}: ${response.message()}")
-                }
+                postRepository.refreshPosts()
             }catch (e: Exception){
                 e.printStackTrace()
                 if(e.message == "timeout") loadPosts()
@@ -46,15 +47,9 @@ class HomeViewModel(app: Application) : ViewModel(){
 
     // EventHandlers
     fun viewPost(post: Post){
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             try{
-                val response = CodeApi.retrofitService.getPostById(post.id)
-
-                if(response.isSuccessful) {
-                    _post.value = response.body()?.toDomain()
-                }else{
-                    throw Exception("${response.code()}: ${response.message()}")
-                }
+                postRepository.loadPost(post.id)
             }catch (e: Exception){
                 e.printStackTrace()
                 Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
@@ -63,23 +58,15 @@ class HomeViewModel(app: Application) : ViewModel(){
     }
 
     fun likePost(post: Post){
-        if(UserService.loggedIn){
-            GlobalScope.launch(Dispatchers.Main) {
-                try{
-                    val response = CodeApi.retrofitService.likePost(post.id, "Bearer ${UserService.token.value}")
-
-                    if(response.isSuccessful) {
-                        loadPosts()
-                    }else{
-                        throw Exception("${response.code()}: ${response.message()}")
-                    }
-                }catch (e: Exception){
-                    e.printStackTrace()
-                    Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
-                }
+        viewModelScope.launch {
+            try{
+                postRepository.likePost(post.id)
+            }catch (e: SecurityException){
+                Toast.makeText(app, "Create an account or log in to be able to interact with posts", Toast.LENGTH_LONG).show()
+            }catch (e: Exception){
+                e.printStackTrace()
+                Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
             }
-        }else{
-            Toast.makeText(app, "Create an account or log in to be able to interact with posts", Toast.LENGTH_LONG).show()
         }
     }
 

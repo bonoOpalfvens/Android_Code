@@ -1,6 +1,7 @@
 package com.example.fluxcode.network.dtos
 
 import com.example.fluxcode.domain.Comment
+import com.example.fluxcode.network.persistence.dbos.CommentDBO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -15,5 +16,8 @@ data class CommentDTO(
 ) {
     fun toDomain() : Comment {
         return Comment(id, user.toDomain(), dateAdded, content, likes, isLiking)
+    }
+    fun toDBO(postId: Int) : CommentDBO {
+        return CommentDBO(id, user.id, dateAdded, content, likes, postId)
     }
 }

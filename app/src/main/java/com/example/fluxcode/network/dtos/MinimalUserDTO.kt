@@ -1,6 +1,7 @@
 package com.example.fluxcode.network.dtos
 
 import com.example.fluxcode.domain.User
+import com.example.fluxcode.network.persistence.dbos.UserDBO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -18,5 +19,8 @@ data class MinimalUserDTO(
 ) {
     fun toDomain() : User {
         return User(id, userName, displayName, avatar, email, emailIsPrivate, "", "", "", "", noLikedPosts, noCreatedPosts, noCreatedComments)
+    }
+    fun toDBO() : UserDBO {
+        return UserDBO(id, userName, displayName, avatar, email, emailIsPrivate, "", "", "", "", noLikedPosts, noCreatedPosts, noCreatedComments)
     }
 }

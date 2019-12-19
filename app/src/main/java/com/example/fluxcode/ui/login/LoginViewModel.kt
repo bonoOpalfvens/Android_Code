@@ -4,21 +4,28 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.fluxcode.network.CodeApi
-import com.example.fluxcode.network.dtos.LoginDTO
-import com.example.fluxcode.utils.UserService
+import com.example.fluxcode.network.persistence.getDatabase
+import com.example.fluxcode.network.persistence.repositories.TokenRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class LoginViewModel(app: Application) : ViewModel() {
     private val app = app
 
+    // database connection
+    private val viewModelJob = SupervisorJob()
+    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val database = getDatabase(app)
+    private val tokenRepository = TokenRepository(database)
+
+    // fields
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
     init {
-        UserService.setToken("")
+        tokenRepository.logout()
     }
 
     fun login(){
@@ -35,20 +42,19 @@ class LoginViewModel(app: Application) : ViewModel() {
     }
 
     private fun loginRequest(){
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             try{
-                val response = CodeApi.retrofitService.login(LoginDTO(email.value!!, password.value!!))
-
-                if(response.isSuccessful) {
-                    UserService.setToken(response.body()!!.token)
-                }else{
-                    if(response.code() == 400) throw Exception("Invalid credentials provided.")
-                    throw Exception("${response.code()}: ${response.message()}")
-                }
+                tokenRepository.login(email.value!!, password.value!!)
             }catch (e: Exception){
                 e.printStackTrace()
                 Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    // clear all jobs on clear
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

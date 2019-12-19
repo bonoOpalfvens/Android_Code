@@ -1,6 +1,7 @@
 package com.example.fluxcode.network.dtos
 
 import com.example.fluxcode.domain.Post
+import com.example.fluxcode.network.persistence.dbos.PostDBO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -18,5 +19,8 @@ data class PostResponseDTO(
 ) {
     fun toDomain() : Post {
         return Post(id, title, content, user.toDomain(), dateAdded, noComments, likes, isLiking).loadBoard(board.toDomain())
+    }
+    fun toDBO() : PostDBO {
+        return PostDBO(id, title, content, user.id, dateAdded, noComments, likes, board.id)
     }
 }

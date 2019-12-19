@@ -1,6 +1,7 @@
 package com.example.fluxcode.network.dtos
 
 import com.example.fluxcode.domain.Board
+import com.example.fluxcode.network.persistence.dbos.BoardDBO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -18,5 +19,8 @@ data class BoardResponseDTO(
     fun toDomain() : Board {
         return Board(id, name, description, icon, likes, noPosts, isLiking)
             .loadPosts(posts.map { it.toDomain().loadBoard(MinimalBoardDTO(id, name, description, icon, noPosts, likes, isLiking).toDomain()) })
+    }
+    fun toDBO() : BoardDBO {
+        return BoardDBO(id, name, description, icon, likes, noPosts)
     }
 }
