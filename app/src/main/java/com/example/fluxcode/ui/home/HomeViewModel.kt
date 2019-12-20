@@ -3,7 +3,6 @@ package com.example.fluxcode.ui.home
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fluxcode.domain.Post
 import com.example.fluxcode.network.persistence.getDatabase
@@ -23,8 +22,7 @@ class HomeViewModel(app: Application) : ViewModel(){
     private val postRepository = PostRepository(database)
 
     // safeArgs navigation
-    private val _post = MutableLiveData<Post>()
-    val post: LiveData<Post> get() = _post
+    val post = postRepository.selectedPost
 
     // fields
     val posts: LiveData<List<Post>> get() = postRepository.posts
@@ -61,6 +59,7 @@ class HomeViewModel(app: Application) : ViewModel(){
         viewModelScope.launch {
             try{
                 postRepository.likePost(post.id)
+                postRepository.refreshPosts()
             }catch (e: SecurityException){
                 Toast.makeText(app, "Create an account or log in to be able to interact with posts", Toast.LENGTH_LONG).show()
             }catch (e: Exception){
@@ -72,6 +71,12 @@ class HomeViewModel(app: Application) : ViewModel(){
 
     // SafeArgs
     fun onNavigated(){
-        _post.value = null
+        postRepository.selectedPost.value = null
+    }
+
+    // clear all jobs on clear
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

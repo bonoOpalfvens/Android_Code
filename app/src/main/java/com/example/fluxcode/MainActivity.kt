@@ -10,6 +10,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.fluxcode.network.persistence.getDatabase
+import com.example.fluxcode.network.persistence.repositories.TokenRepository
 import com.example.fluxcode.utils.UserService
 import com.google.android.material.navigation.NavigationView
 
@@ -35,6 +37,11 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // handle saved login tokens
+        val database = getDatabase(this)
+        val tokenRepository = TokenRepository(database)
+        UserService.token = tokenRepository.token
 
         // Responsive layout for logged in users
         UserService.token.observe(this, Observer {

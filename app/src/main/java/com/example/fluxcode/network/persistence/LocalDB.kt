@@ -8,7 +8,6 @@ import com.example.fluxcode.network.persistence.dbos.*
 
 @Database(entities = [
     BoardDBO::class,
-    CommentDBO::class,
     PostDBO::class,
     TokenDBO::class,
     UserDBO::class

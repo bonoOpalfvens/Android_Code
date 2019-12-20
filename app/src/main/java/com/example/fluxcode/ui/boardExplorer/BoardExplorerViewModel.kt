@@ -3,38 +3,35 @@ package com.example.fluxcode.ui.boardExplorer
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fluxcode.domain.Board
-import com.example.fluxcode.network.CodeApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.fluxcode.network.persistence.getDatabase
+import com.example.fluxcode.network.persistence.repositories.BoardRepository
+import kotlinx.coroutines.*
 
 class BoardExplorerViewModel(app: Application) : ViewModel(){
     private val app = app
 
-    private val _boards = MutableLiveData<List<Board>>()
-    val boards: LiveData<List<Board>> get() = _boards
+    // database connection
+    private val viewModelJob = SupervisorJob()
+    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val database = getDatabase(app)
+    private val boardRepository = BoardRepository(database)
 
     // safeArgs navigation
-    private val _board = MutableLiveData<Board>()
-    val board: LiveData<Board> get() = _board
+    val board: LiveData<Board> get() = boardRepository.selectedBoard
+
+    // fields
+    val boards: LiveData<List<Board>> get() = boardRepository.boards
 
     init {
         loadBoards()
     }
 
     private fun loadBoards(){
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             try{
-                val response = CodeApi.retrofitService.getTopBoards()
-
-                if(response.isSuccessful) {
-                    _boards.value = response.body()?.map { it.toDomain() } ?: emptyList()
-                }else{
-                    throw Exception("${response.code()}: ${response.message()}")
-                }
+                boardRepository.refreshBoards()
             }catch (e: Exception){
                 e.printStackTrace()
                 if(e.message == "timeout") loadBoards()
@@ -45,15 +42,9 @@ class BoardExplorerViewModel(app: Application) : ViewModel(){
 
     // EventHandlers
     fun viewBoard(board: Board){
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             try{
-                val response = CodeApi.retrofitService.getBoardById(board.id)
-
-                if(response.isSuccessful) {
-                    _board.value = response.body()?.toDomain()
-                }else{
-                    throw Exception("${response.code()}: ${response.message()}")
-                }
+                boardRepository.loadBoardById(board.id)
             }catch (e: Exception){
                 e.printStackTrace()
                 Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()
@@ -63,6 +54,12 @@ class BoardExplorerViewModel(app: Application) : ViewModel(){
 
     // SafeArgs
     fun onNavigated(){
-        _board.value = null
+        boardRepository.selectedBoard.value = null
+    }
+
+    // clear all jobs on clear
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

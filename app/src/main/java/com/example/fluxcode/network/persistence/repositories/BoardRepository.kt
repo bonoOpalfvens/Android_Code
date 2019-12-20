@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.fluxcode.domain.Board
+import com.example.fluxcode.domain.Post
 import com.example.fluxcode.network.CodeApi
 import com.example.fluxcode.network.persistence.LocalDB
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ class BoardRepository(private val database: LocalDB) {
         Transformations.map(database.boardDAO.getTopBoards()){ it.map { b -> b.toDomain() } }
 
     val selectedBoard = MutableLiveData<Board>()
+    val selectedPosts = MutableLiveData<List<Post>>()
 
     suspend fun refreshBoards() {
         withContext(Dispatchers.IO){
@@ -31,17 +33,20 @@ class BoardRepository(private val database: LocalDB) {
     }
 
     suspend fun loadBoardById(id: Int) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.Main){
             val response = CodeApi.retrofitService.getBoardById(id)
 
             if(response.isSuccessful) {
                 val board = response.body()
-                database.boardDAO.insertBoard(board!!.toDBO())
-                board.posts.forEach {
-                    database.postDAO.insertPost(it.toDBO(board.id))
-                    database.postDAO.insertUser(it.user.toDBO())
+                withContext(Dispatchers.IO){
+                    database.boardDAO.insertBoard(board!!.toDBO())
+                    board.posts.forEach {
+                        database.postDAO.insertPost(it.toDBO(board.id))
+                        database.postDAO.insertUser(it.user.toDBO())
+                    }
                 }
-                selectedBoard.value = board.toDomain()
+                selectedBoard.value = board?.toDomain()
+                selectedPosts.value = board?.toDomain()?.posts
             }else{
                 throw Exception("${response.code()}: ${response.message()}")
             }

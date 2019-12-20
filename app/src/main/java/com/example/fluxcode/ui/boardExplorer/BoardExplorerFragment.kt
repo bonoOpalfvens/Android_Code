@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -37,7 +38,7 @@ class BoardExplorerFragment : Fragment() {
         ))
         binding.boardExplorerList.adapter = adapter
         boardExplorerViewModel.boards.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it.sortedByDescending { b -> b.likes })
+            adapter.submitList(it.sortedWith(compareBy {p -> p.id}))
         })
 
         // safeArgs navigation

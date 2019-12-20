@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fluxcode.network.persistence.getDatabase
 import com.example.fluxcode.network.persistence.repositories.TokenRepository
+import com.example.fluxcode.utils.UserService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -20,12 +21,16 @@ class LoginViewModel(app: Application) : ViewModel() {
     private val database = getDatabase(app)
     private val tokenRepository = TokenRepository(database)
 
-    // fields
+    // input fields
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
     init {
-        tokenRepository.logout()
+        if(UserService.loggedIn){
+            viewModelScope.launch {
+                tokenRepository.logout()
+            }
+        }
     }
 
     fun login(){
