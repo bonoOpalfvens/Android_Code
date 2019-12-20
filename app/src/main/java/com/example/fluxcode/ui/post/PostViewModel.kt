@@ -49,14 +49,18 @@ class PostViewModel(app: Application, post: Post) : ViewModel(){
     fun comment(){
         viewModelScope.launch {
             try{
-                postRepository.postComment(post.value!!.id, comment.value!!)
+                val commentS = comment.value?.trim() ?: ""
+                if(commentS.length < 2 || commentS.length > 250)
+                    throw IllegalArgumentException()
+
+                postRepository.postComment(post.value!!.id, commentS)
                 refresh()
                 // clear comment
                 comment.value = ""
             }catch(e: SecurityException){
                 Toast.makeText(app, "Create an account or log in to be able to interact with posts", Toast.LENGTH_LONG).show()
             }catch(e: IllegalArgumentException){
-                Toast.makeText(app, "Please enter text before clicking this button.", Toast.LENGTH_LONG).show()
+                Toast.makeText(app, "A comment must have between 2 and 250 characters.", Toast.LENGTH_LONG).show()
             }catch(e: Exception){
                 e.printStackTrace()
                 Toast.makeText(app, "Error ${e.message}", Toast.LENGTH_LONG).show()

@@ -71,8 +71,6 @@ class PostRepository(private val database: LocalDB) {
     suspend fun postComment(postId: Int, comment: String) {
         if(!UserService.loggedIn)
             throw SecurityException()
-        if(comment.isNullOrBlank())
-            throw IllegalArgumentException()
 
         withContext(Dispatchers.IO){
             val response = CodeApi.retrofitService.createComment(CreateCommentDTO(postId, comment), "Bearer ${UserService.token.value}")

@@ -12,12 +12,42 @@ class Comment : Serializable {
         this._isLiking = isLiking
     }
 
-    val id: Int
+    private var _id: Int = 0
+    var id: Int
+        get() = _id
+        set(value) {
+            if (_id != 0)
+                throw IllegalArgumentException("Can't reassign id")
+            if (value <= 0)
+                throw IllegalArgumentException("Invalid id")
+
+            _id = value
+        }
+
     val user: User
     private val dateAdded: String
-    val content: String
 
-    private var _likes: Int
+    private var _content: String = ""
+    var content: String
+        get() = _content
+        set(value) {
+            if(value.isBlank())
+                throw IllegalArgumentException("Content can't be empty")
+            if(value.length > 250)
+                throw IllegalArgumentException("Content can't exceed 250 characters")
+            if(value.trim().length < 2)
+                throw IllegalArgumentException("Content can't have less than 2 characters")
+
+            _content = value.trim()
+        }
+
+    private var _likes: Int = 0
+        set(value) {
+            if(value < 0)
+                throw IllegalArgumentException("Likes can't be negative")
+
+            field = value
+        }
     val likes: Int get() = _likes
 
     private var _isLiking: Boolean
