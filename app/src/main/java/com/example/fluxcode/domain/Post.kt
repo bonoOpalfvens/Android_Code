@@ -9,21 +9,71 @@ class Post : Serializable {
         this.content = content
         this.user = user
         this.dateAdded = dateAdded
-        this._noComments = noComments
+        this.noComments = noComments
         this._likes = likes
         this._isLiking = isLiking
     }
 
-    val id: Int
-    val title: String
-    val content: String
+    private var _id: Int = 0
+    var id: Int
+        get() = _id
+        set(value) {
+            if (_id != 0)
+                throw IllegalArgumentException("Can't reassign id")
+            if (value <= 0)
+                throw IllegalArgumentException("Invalid id")
+
+            _id = value
+        }
+
+    private var _title: String = ""
+    var title: String
+        get() = _title
+        set(value) {
+            if (value.isBlank())
+                throw IllegalArgumentException("Title can't be empty")
+            if (value.trim().length > 50)
+                throw IllegalArgumentException("Title can't exceed 50 characters")
+            if (value.trim().length < 3)
+                throw IllegalArgumentException("Title can't be shorter than 3 characters")
+
+            _title = value
+        }
+
+    private var _content: String = ""
+    var content: String
+        get() = _content
+        set(value) {
+            if (value.isBlank())
+                throw IllegalArgumentException("Content can't be empty")
+            if (value.trim().length > 10000)
+                throw IllegalArgumentException("Content can't exceed 10000 characters")
+            if (value.trim().length < 30)
+                throw IllegalArgumentException("Content can't be shorter than 30 characters")
+
+            _content = value
+        }
+
     val user: User
     private val dateAdded: String
 
-    private var _noComments: Int
-    val noComments: Int get() = _noComments
+    private var _noComments: Int = 0
+    var noComments: Int
+        get() = _noComments
+        set(value) {
+            if(value < 0)
+                throw IllegalArgumentException("# of comments can't be negative")
 
-    private var _likes: Int
+            _noComments = value
+        }
+
+    private var _likes: Int = 0
+        set(value) {
+            if(value < 0)
+                throw IllegalArgumentException("Likes can't be negative")
+
+            field = value
+        }
     val likes: Int get() = _likes
 
     private var _isLiking: Boolean

@@ -98,6 +98,12 @@ class BoardTest {
         Board(1, "C#", "Programming language", "https://i.imgur.com/HUBBvDr.png", -1, 0, true)
     }
 
+    // noPosts
+    @Test(expected = IllegalArgumentException::class)
+    fun board_noPostsNegative_throwsException() {
+        Board(1, "C#", "Programming language", "https://i.imgur.com/HUBBvDr.png", 0, -1, true)
+    }
+
     // Like()
     @Test
     fun board_likeIsLiking_decrementsLikes() {
